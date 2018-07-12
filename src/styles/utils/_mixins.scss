@@ -1,0 +1,127 @@
+// App Mixins
+// --------------------------------------------------
+// Funcoes sass para estilizacao do app
+
+/**
+* Aplica a propriedade desejada para todos os prefixos dos browsers
+*
+* @param {string} $property - Propriedade que deseja aplicar os prefixos
+* @param {string} $value - Valor da propriedade a ser aplicado o prefixo
+*/
+@mixin vendor-prefixes($property, $value) {
+  #{$property}: $value;
+  -webkit-#{$property}: $value;
+  -moz-#{$property}: $value;
+  -ms-#{$property}: $value;
+}
+
+/**
+* Define as bordas arredondadas de um elemento
+*
+* @param {string} $radius - Texto com os valores da borda. Pode ser
+* o valor geral ou valores especificos para cada borda.
+*/
+@mixin border-radius($radius) {
+  @include vendor-prefixes(border-radius, $radius);
+}
+
+/**
+* Define os filtros
+*
+* @param {string} $radius - Texto com os valores do filtro.
+*/
+
+@mixin filter($value) {
+  @include vendor-prefixes(filter, $value);
+}
+
+/**
+* Aplicacao de background linear
+*
+* @param {List} $params - Params
+*/
+
+@mixin transform($params) {
+  @include vendor-prefixes('transform', $params);
+}
+
+/**
+* Aplica opacidade no elemento
+* @param {string} $opacity - Valor da opacidade (Ex: 0.5)
+*/
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+/**
+* Facilita a criação de animações, com menos linhas de código
+* @param {string} $str - Argumentos que serão passados para o efeito de animação
+*/
+@mixin animation($params) {
+  @include vendor-prefixes('animation', $params);
+}
+
+/**
+* Facilita a criação de animações, com menos linhas de código
+* @param {List} $properties - Propriedades referentes a transicao
+*/
+
+@mixin transition($properties...) {
+  @if length($properties) >= 1 {
+    @include vendor-prefixes('transition', $properties);
+  }
+
+  @else {
+    @include vendor-prefixes('transition',  "all 0.2s ease-in-out 0s");
+  }
+}
+
+/**
+* Manipula o placeholder de acordo com os prefixos necessarios
+*/
+
+@mixin placeholder() {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+
+  &:-moz-placeholder {
+    @content;
+  }
+
+  &::-moz-placeholder {
+    @content;
+  }
+
+  &:-ms-input-placeholder {
+    @content;
+  }
+}
+
+/**
+* Adiciona o ellipsis se o texto ultrapassar o max-width
+* @param {integer, percent} $max-width - largura em que se deve ser quebrado o texto
+*/
+
+@mixin ellipsis($max-width: 100%){
+  display: inline-block;
+  max-width: $max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
